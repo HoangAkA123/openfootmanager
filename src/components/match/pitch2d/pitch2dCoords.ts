@@ -106,10 +106,7 @@ export function buildPitchCoordinates(
   const homeLineCount = homeDist.lines.length;
   homeDist.lines.forEach((linePlayers, lineIdx) => {
     // Spread lines between x = 20% and x = 60%
-    const baseX =
-      homeLineCount > 1
-        ? 20 + (lineIdx * 40) / (homeLineCount - 1)
-        : 35;
+    const baseX = homeLineCount > 1 ? 20 + (lineIdx * 40) / (homeLineCount - 1) : 35;
     const shiftedX = clamp(baseX + zoneShift, 10, 92);
 
     linePlayers.forEach((player, pIdx) => {
@@ -149,10 +146,7 @@ export function buildPitchCoordinates(
   const awayLineCount = awayDist.lines.length;
   awayDist.lines.forEach((linePlayers, lineIdx) => {
     // Symmetrical layout: 100 - (20 + lineIdx * 40 / (N - 1))
-    const baseX =
-      awayLineCount > 1
-        ? 100 - (20 + (lineIdx * 40) / (awayLineCount - 1))
-        : 65;
+    const baseX = awayLineCount > 1 ? 100 - (20 + (lineIdx * 40) / (awayLineCount - 1)) : 65;
     const shiftedX = clamp(baseX + zoneShift, 8, 90);
 
     linePlayers.forEach((player, pIdx) => {

@@ -1,11 +1,7 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { MatchSnapshot, MatchEvent } from "../types";
-import {
-  buildPitchCoordinates,
-  calculateBallPosition,
-  type PlayerPitchPos,
-} from "./pitch2dCoords";
+import { buildPitchCoordinates, calculateBallPosition, type PlayerPitchPos } from "./pitch2dCoords";
 
 export interface MatchPitch2DProps {
   snapshot: MatchSnapshot;
@@ -122,14 +118,7 @@ export default function MatchPitch2D({
           />
 
           {/* Halfway Line */}
-          <line
-            x1="50"
-            y1="2"
-            x2="50"
-            y2="66"
-            stroke="rgba(255,255,255,0.7)"
-            strokeWidth="0.6"
-          />
+          <line x1="50" y1="2" x2="50" y2="66" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" />
 
           {/* Center Circle & Center Spot */}
           <circle
@@ -223,10 +212,30 @@ export default function MatchPitch2D({
           />
 
           {/* Corner Arcs */}
-          <path d="M 2 4 A 2 2 0 0 0 4 2" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" />
-          <path d="M 2 64 A 2 2 0 0 1 4 66" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" />
-          <path d="M 98 4 A 2 2 0 0 1 96 2" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" />
-          <path d="M 98 64 A 2 2 0 0 0 96 66" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" />
+          <path
+            d="M 2 4 A 2 2 0 0 0 4 2"
+            fill="none"
+            stroke="rgba(255,255,255,0.7)"
+            strokeWidth="0.6"
+          />
+          <path
+            d="M 2 64 A 2 2 0 0 1 4 66"
+            fill="none"
+            stroke="rgba(255,255,255,0.7)"
+            strokeWidth="0.6"
+          />
+          <path
+            d="M 98 4 A 2 2 0 0 1 96 2"
+            fill="none"
+            stroke="rgba(255,255,255,0.7)"
+            strokeWidth="0.6"
+          />
+          <path
+            d="M 98 64 A 2 2 0 0 0 96 66"
+            fill="none"
+            stroke="rgba(255,255,255,0.7)"
+            strokeWidth="0.6"
+          />
         </svg>
 
         {/* Home Player Dots */}
@@ -241,7 +250,8 @@ export default function MatchPitch2D({
           style={{
             left: `${ball.x}%`,
             top: `${ball.y}%`,
-            transition: "left 350ms cubic-bezier(0.2, 0.8, 0.2, 1), top 350ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+            transition:
+              "left 350ms cubic-bezier(0.2, 0.8, 0.2, 1), top 350ms cubic-bezier(0.2, 0.8, 0.2, 1)",
           }}
           className={`absolute -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center rounded-full pointer-events-none ${
             isGoal
@@ -293,7 +303,8 @@ function renderPlayerDot(p: PlayerPitchPos, isHighlighted: boolean) {
       style={{
         left: `${p.x}%`,
         top: `${p.y}%`,
-        transition: "left 400ms cubic-bezier(0.2, 0.8, 0.2, 1), top 400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+        transition:
+          "left 400ms cubic-bezier(0.2, 0.8, 0.2, 1), top 400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
       }}
       className="absolute -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center group cursor-pointer"
       title={`${p.name} (${p.position})`}

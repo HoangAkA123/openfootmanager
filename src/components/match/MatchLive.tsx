@@ -397,37 +397,37 @@ export default function MatchLive({
           )}
           <div className="flex items-center justify-between bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300">
             <div className="flex">
-            {[
-              {
-                id: "events" as ActivePanel,
-                label: t("match.events"),
-                icon: <MessageSquare className="w-4 h-4" />,
-              },
-              {
-                id: "stats" as ActivePanel,
-                label: t("match.stats"),
-                icon: <BarChart3 className="w-4 h-4" />,
-              },
-              {
-                id: "lineups" as ActivePanel,
-                label: t("match.lineups"),
-                icon: <Users className="w-4 h-4" />,
-              },
-            ].map((tab) => (
-              <button
-                type="button"
-                key={tab.id}
-                onClick={() => setActivePanel(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
-                  activePanel === tab.id
-                    ? "text-primary-500 dark:text-primary-400 border-primary-500 bg-primary-50 dark:bg-navy-700/50"
-                    : "text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-              >
-                {tab.icon}
-                {tab.label}
-              </button>
-            ))}
+              {[
+                {
+                  id: "events" as ActivePanel,
+                  label: t("match.events"),
+                  icon: <MessageSquare className="w-4 h-4" />,
+                },
+                {
+                  id: "stats" as ActivePanel,
+                  label: t("match.stats"),
+                  icon: <BarChart3 className="w-4 h-4" />,
+                },
+                {
+                  id: "lineups" as ActivePanel,
+                  label: t("match.lineups"),
+                  icon: <Users className="w-4 h-4" />,
+                },
+              ].map((tab) => (
+                <button
+                  type="button"
+                  key={tab.id}
+                  onClick={() => setActivePanel(tab.id)}
+                  className={`flex items-center gap-2 px-5 py-3 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
+                    activePanel === tab.id
+                      ? "text-primary-500 dark:text-primary-400 border-primary-500 bg-primary-50 dark:bg-navy-700/50"
+                      : "text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300"
+                  }`}
+                >
+                  {tab.icon}
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
             <div className="pr-3">

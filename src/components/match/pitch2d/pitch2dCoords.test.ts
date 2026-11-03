@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  buildPitchCoordinates,
-  calculateBallPosition,
-  type PlayerPitchPos,
-} from "./pitch2dCoords";
+import { buildPitchCoordinates, calculateBallPosition, type PlayerPitchPos } from "./pitch2dCoords";
 import type { EnginePlayerData, MatchEvent } from "../types";
 
 function makePlayer(id: string, name: string, position: string, _number = 1): EnginePlayerData {
