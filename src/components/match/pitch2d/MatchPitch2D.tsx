@@ -268,7 +268,7 @@ export default function MatchPitch2D({
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <span className="uppercase tracking-wider font-semibold text-[11px]">
-            {t("match.pitch2d.zone", { zone: snapshot.ball_zone }) || snapshot.ball_zone}
+            {snapshot.ball_zone}
           </span>
         </div>
         <div className="text-[11px] text-emerald-300/80">
