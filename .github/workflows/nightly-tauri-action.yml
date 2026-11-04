@@ -107,10 +107,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: "macos-latest"
-            args: "--target aarch64-apple-darwin"
-          - platform: "macos-latest"
-            args: "--target x86_64-apple-darwin"
           - platform: "ubuntu-22.04"
             args: ""
           - platform: "ubuntu-22.04-arm"
@@ -141,8 +137,6 @@ jobs:
 
       - name: install Rust 1.95.0
         uses: dtolnay/rust-toolchain@1.95.0
-        with:
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
@@ -166,11 +160,6 @@ jobs:
           # Bakes the channel into the bundled frontend so the in-app version
           # reads "v0.3.0-nightly · <sha>" instead of looking like a stable build.
           OFM_CHANNEL: nightly
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         with:
           tagName: ${{ needs.prepare-nightly.outputs.tag }}
           releaseName: ${{ needs.prepare-nightly.outputs.release_name }}
@@ -205,7 +194,7 @@ jobs:
     needs: [prepare-nightly, publish-tauri-nightly]
     # Every platform must have succeeded. `fail-fast: false` lets one fail while the others
     # upload, and the previous condition here (`result != 'skipped'`) was *true* for a failed
-    # matrix — so a build missing its macOS bundles would still have been published, with
+    # matrix — so a build missing some bundles would still have been published, with
     # checksums describing a set of assets nobody can download in full. That is the thing the
     # draft was introduced to prevent one commit ago, and the condition did not honour it.
     #
