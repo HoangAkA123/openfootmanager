@@ -1,7 +1,135 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-04T13:09:20.334Z",
+  "updatedAt": "2026-11-04T14:19:14.726Z",
   "builds": [
+    {
+      "schemaVersion": 1,
+      "product": "Openfoot Manager",
+      "repository": "HoangAkA123/openfootmanager",
+      "tag": "nightly-20261104-acaec54",
+      "version": "0.3.0-nightly.20261104+acaec54",
+      "commit": "acaec54cea29a26dfb9c0f96336232b4823e9c05",
+      "prerelease": true,
+      "publishedAt": "2026-11-04T14:18:50Z",
+      "releaseName": "Openfoot Manager Nightly 0.3.0-nightly.20261104+acaec54",
+      "releaseUrl": "https://github.com/HoangAkA123/openfootmanager/releases/tag/nightly-20261104-acaec54",
+      "assets": [
+        {
+          "id": 709760734,
+          "name": "Openfoot.Manager_0.3.0_aarch64.AppImage",
+          "label": "",
+          "size": 89197064,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager_0.3.0_aarch64.AppImage",
+          "sha256": "7f7a3fd93cde8845905720a98fa44dc2db021c0437e27b6a3b1eb97f9a107d0c",
+          "platform": "linux",
+          "arch": "arm64",
+          "kind": "portable",
+          "extension": ".appimage"
+        },
+        {
+          "id": 709760524,
+          "name": "Openfoot.Manager_0.3.0_arm64.deb",
+          "label": "",
+          "size": 13638494,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager_0.3.0_arm64.deb",
+          "sha256": "0a72c0c73ab93d24b6dd03abf4c6776e8ba962414e54ac0ac3cab4d38463ae4f",
+          "platform": "linux",
+          "arch": "arm64",
+          "kind": "package",
+          "extension": ".deb"
+        },
+        {
+          "id": 709760657,
+          "name": "Openfoot.Manager-0.3.0-1.aarch64.rpm",
+          "label": "",
+          "size": 13640055,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager-0.3.0-1.aarch64.rpm",
+          "sha256": "2d633687cc5600b28598236211d9bebb39d6373d2eaecfbe18a47d42d6b3870b",
+          "platform": "linux",
+          "arch": "arm64",
+          "kind": "package",
+          "extension": ".rpm"
+        },
+        {
+          "id": 709758798,
+          "name": "Openfoot.Manager_0.3.0_amd64.AppImage",
+          "label": "",
+          "size": 91711992,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager_0.3.0_amd64.AppImage",
+          "sha256": "f2e60bdd1e18ff79a8f4a6ff3f0f3ca005f92a31d44870040185fc4a08224d08",
+          "platform": "linux",
+          "arch": "x64",
+          "kind": "portable",
+          "extension": ".appimage"
+        },
+        {
+          "id": 709758615,
+          "name": "Openfoot.Manager_0.3.0_amd64.deb",
+          "label": "",
+          "size": 14190446,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager_0.3.0_amd64.deb",
+          "sha256": "1ca52045833178bf1bf4f6dbd832db1a93a3daf1977ba25154d5a7fba9a6ab7c",
+          "platform": "linux",
+          "arch": "x64",
+          "kind": "package",
+          "extension": ".deb"
+        },
+        {
+          "id": 709758678,
+          "name": "Openfoot.Manager-0.3.0-1.x86_64.rpm",
+          "label": "",
+          "size": 14191136,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager-0.3.0-1.x86_64.rpm",
+          "sha256": "4a6d6d98c937e822c650ff9a933dd82680a029168cd72d18e5bafd4cec83c91b",
+          "platform": "linux",
+          "arch": "x64",
+          "kind": "package",
+          "extension": ".rpm"
+        },
+        {
+          "id": 709768674,
+          "name": "Openfoot.Manager_0.3.0_x64_en-US.msi",
+          "label": "",
+          "size": 13221888,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager_0.3.0_x64_en-US.msi",
+          "sha256": "97a83e7b3321242574e0956a307d18cc830cc2e184ca2615068c634aa452e924",
+          "platform": "windows",
+          "arch": "x64",
+          "kind": "installer",
+          "extension": ".msi"
+        },
+        {
+          "id": 709768723,
+          "name": "Openfoot.Manager_0.3.0_x64-setup.exe",
+          "label": "",
+          "size": 10055932,
+          "contentType": "application/zip",
+          "downloadUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/Openfoot.Manager_0.3.0_x64-setup.exe",
+          "sha256": "bdad372f52d5a6acb7af1527f7395b4fe9f0410ed532cc76b8e8c59e1f581841",
+          "platform": "windows",
+          "arch": "x64",
+          "kind": "installer",
+          "extension": ".exe"
+        }
+      ],
+      "previousTag": "nightly-20261104-1e1a27e",
+      "compareUrl": "https://github.com/HoangAkA123/openfootmanager/compare/nightly-20261104-1e1a27e...nightly-20261104-acaec54",
+      "checksumsUrl": "https://github.com/HoangAkA123/openfootmanager/releases/download/nightly-20261104-acaec54/nightly-checksums.txt",
+      "commitCount": 1,
+      "commits": [
+        {
+          "sha": "acaec54c",
+          "subject": "feat(match): 60 FPS Canvas 2D engine with LERP interpolation and 2.5D ball bounce shadow"
+        }
+      ]
+    },
     {
       "schemaVersion": 1,
       "product": "Openfoot Manager",
