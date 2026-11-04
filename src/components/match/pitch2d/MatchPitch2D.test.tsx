@@ -18,8 +18,9 @@ describe("MatchPitch2D", () => {
     const snapshot = makeSnapshot();
     const { container } = render(<MatchPitch2D snapshot={snapshot} />);
 
-    // Renders the pitch container and SVG field
+    // Renders the pitch container, 60fps Canvas, and SVG field
     expect(container.querySelector('[data-testid="match-pitch-2d"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-testid="pitch-2d-canvas"]')).toBeInTheDocument();
     expect(container.querySelector("svg")).toBeInTheDocument();
 
     // Renders player dots
