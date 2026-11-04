@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import type { MatchSnapshot, MatchEvent } from "../types";
 import { buildPitchCoordinates, calculateBallPosition, type PlayerPitchPos } from "./pitch2dCoords";
@@ -18,6 +18,23 @@ export default function MatchPitch2D({
 }: MatchPitch2DProps) {
   const { t } = useTranslation();
 
+  // Multi-step micro animation per minute / event update (0: setup, 1: action, 2: resolution)
+  const [animationStep, setAnimationStep] = useState(0);
+
+  useEffect(() => {
+    setAnimationStep(0);
+    const t1 = setTimeout(() => setAnimationStep(1), 250);
+    const t2 = setTimeout(() => setAnimationStep(2), 700);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [snapshot.current_minute, latestEvents]);
+
+  const activeEvents = useMemo(() => {
+    return latestEvents ?? snapshot.events;
+  }, [latestEvents, snapshot.events]);
+
   const coords = useMemo(() => {
     return buildPitchCoordinates(
       snapshot.home_team.formation,
@@ -27,6 +44,8 @@ export default function MatchPitch2D({
       snapshot.sent_off,
       snapshot.ball_zone,
       snapshot.possession,
+      activeEvents,
+      animationStep,
     );
   }, [
     snapshot.home_team.formation,
@@ -36,22 +55,24 @@ export default function MatchPitch2D({
     snapshot.sent_off,
     snapshot.ball_zone,
     snapshot.possession,
+    activeEvents,
+    animationStep,
   ]);
 
   const ball = useMemo(() => {
     return calculateBallPosition({
       zone: snapshot.ball_zone,
       possession: snapshot.possession,
-      events: latestEvents ?? snapshot.events,
+      events: activeEvents,
       homePositions: coords.home,
       awayPositions: coords.away,
+      step: animationStep,
     });
-  }, [snapshot.ball_zone, snapshot.possession, snapshot.events, latestEvents, coords]);
+  }, [snapshot.ball_zone, snapshot.possession, activeEvents, coords, animationStep]);
 
   const activeEvent = useMemo(() => {
-    const list = latestEvents ?? snapshot.events;
-    return list.length > 0 ? list[list.length - 1] : null;
-  }, [latestEvents, snapshot.events]);
+    return activeEvents.length > 0 ? activeEvents[activeEvents.length - 1] : null;
+  }, [activeEvents]);
 
   const isGoal = ball.isGoal || activeEvent?.event_type === "Goal";
 
@@ -236,7 +257,69 @@ export default function MatchPitch2D({
             stroke="rgba(255,255,255,0.7)"
             strokeWidth="0.6"
           />
+
+          {/* Pass Trajectory Path */}
+          {ball.passTrajectory && (
+            <line
+              x1={ball.passTrajectory.fromX}
+              y1={(ball.passTrajectory.fromY * 68) / 100}
+              x2={ball.passTrajectory.toX}
+              y2={(ball.passTrajectory.toY * 68) / 100}
+              stroke="rgba(255, 255, 255, 0.75)"
+              strokeWidth="0.7"
+              strokeDasharray="2 1.5"
+            />
+          )}
+
+          {/* Shot Trajectory Path */}
+          {ball.isShot && ball.targetX !== undefined && (
+            <line
+              x1={ball.x}
+              y1={(ball.y * 68) / 100}
+              x2={ball.targetX}
+              y2={((ball.targetY ?? 50) * 68) / 100}
+              stroke="rgba(250, 204, 21, 0.85)"
+              strokeWidth="0.9"
+              strokeDasharray="2 1"
+            />
+          )}
         </svg>
+
+        {/* Dynamic Action Tag (Pass, Shot, Save, Goal) */}
+        {ball.actionText && (
+          <div
+            style={{
+              left: `${ball.x}%`,
+              top: `${Math.max(8, ball.y - 7)}%`,
+              transition:
+                "left 350ms cubic-bezier(0.2, 0.8, 0.2, 1), top 350ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+            }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+          >
+            <div
+              className={`px-2 py-0.5 rounded-full text-[10px] font-heading font-black tracking-wider uppercase shadow-md flex items-center gap-1 border ${
+                ball.actionType === "goal"
+                  ? "bg-amber-400 border-white text-black animate-bounce ring-2 ring-yellow-400"
+                  : ball.actionType === "shot"
+                    ? "bg-rose-500 border-rose-200 text-white animate-pulse"
+                    : ball.actionType === "save"
+                      ? "bg-emerald-600 border-emerald-300 text-white"
+                      : "bg-blue-600/90 border-blue-300/60 text-white backdrop-blur-sm"
+              }`}
+            >
+              <span>
+                {ball.actionType === "goal"
+                  ? "⚽"
+                  : ball.actionType === "shot"
+                    ? "⚡"
+                    : ball.actionType === "save"
+                      ? "🧤"
+                      : "👟"}
+              </span>
+              <span>{ball.actionText}</span>
+            </div>
+          </div>
+        )}
 
         {/* Home Player Dots */}
         {coords.home.map((p) => renderPlayerDot(p, ball.highlightPlayerId === p.playerId))}
@@ -315,7 +398,7 @@ function renderPlayerDot(p: PlayerPitchPos, isHighlighted: boolean) {
           isHighlighted ? "ring-2 ring-yellow-400 ring-offset-1 scale-110" : ""
         }`}
       >
-        {p.number || initials}
+        {p.isGoalkeeper ? "🧤" : p.number || initials}
       </div>
 
       {/* Name tooltip below */}

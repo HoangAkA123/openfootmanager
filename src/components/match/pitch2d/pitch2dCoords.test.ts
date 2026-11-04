@@ -130,6 +130,103 @@ describe("pitch2dCoords", () => {
         expect(attackHomeDef.x).toBeGreaterThan(midHomeDef.x);
       }
     });
+
+    it("pushes attacking team forward and wide when in possession", () => {
+      const home = makeTeamXI("home");
+      const away = makeTeamXI("away");
+
+      const inPossessionCoords = buildPitchCoordinates(
+        "4-4-2",
+        "4-4-2",
+        home,
+        away,
+        [],
+        "Midfield",
+        "Home",
+      );
+      const outOfPossessionCoords = buildPitchCoordinates(
+        "4-4-2",
+        "4-4-2",
+        home,
+        away,
+        [],
+        "Midfield",
+        "Away",
+      );
+
+      const inPossFwd = inPossessionCoords.home.find((p) => p.position === "Forward");
+      const outPossFwd = outOfPossessionCoords.home.find((p) => p.position === "Forward");
+
+      expect(inPossFwd).toBeDefined();
+      expect(outPossFwd).toBeDefined();
+      if (inPossFwd && outPossFwd) {
+        expect(inPossFwd.x).toBeGreaterThan(outPossFwd.x);
+      }
+    });
+
+    it("moves defending goalkeeper to dive towards shot trajectory", () => {
+      const home = makeTeamXI("home");
+      const away = makeTeamXI("away");
+      const shotEvent: MatchEvent = {
+        minute: 25,
+        event_type: "ShotSaved",
+        side: "Home",
+        zone: "AwayBox",
+        player_id: "home-fw1",
+        secondary_player_id: null,
+      };
+
+      const coords = buildPitchCoordinates(
+        "4-4-2",
+        "4-4-2",
+        home,
+        away,
+        [],
+        "AwayBox",
+        "Home",
+        [shotEvent],
+        1, // action step
+      );
+
+      const awayGk = coords.away.find((p) => p.isGoalkeeper);
+      expect(awayGk).toBeDefined();
+      // GK shifts from center (y=50) to make the dive
+      if (awayGk) {
+        expect(awayGk.x).toBeGreaterThan(88);
+      }
+    });
+
+    it("makes the goal scorer celebrate towards the corner", () => {
+      const home = makeTeamXI("home");
+      const away = makeTeamXI("away");
+      const goalEvent: MatchEvent = {
+        minute: 35,
+        event_type: "Goal",
+        side: "Home",
+        zone: "AwayBox",
+        player_id: "home-fw1",
+        secondary_player_id: null,
+      };
+
+      const coords = buildPitchCoordinates(
+        "4-4-2",
+        "4-4-2",
+        home,
+        away,
+        [],
+        "AwayBox",
+        "Home",
+        [goalEvent],
+        2, // resolution / celebration step
+      );
+
+      const scorer = coords.home.find((p) => p.playerId === "home-fw1");
+      expect(scorer).toBeDefined();
+      if (scorer) {
+        // Scorer runs deep towards the opponent corner to celebrate
+        expect(scorer.x).toBeGreaterThan(85);
+      }
+    });
   });
 
   describe("calculateBallPosition", () => {
@@ -212,6 +309,105 @@ describe("pitch2dCoords", () => {
       expect(ball.x).toBeCloseTo(50, 0);
       expect(ball.y).toBeCloseTo(50, 0);
       expect(ball.isGoal).toBe(false);
+    });
+
+    it("calculates pass trajectory when passer and receiver are present", () => {
+      const home: PlayerPitchPos[] = [
+        {
+          playerId: "p-passer",
+          name: "Passer",
+          number: 8,
+          position: "Midfielder",
+          isGoalkeeper: false,
+          side: "Home",
+          x: 45,
+          y: 50,
+        },
+        {
+          playerId: "p-receiver",
+          name: "Receiver",
+          number: 9,
+          position: "Forward",
+          isGoalkeeper: false,
+          side: "Home",
+          x: 65,
+          y: 40,
+        },
+      ];
+
+      const events: MatchEvent[] = [
+        {
+          minute: 20,
+          event_type: "PassCompleted",
+          side: "Home",
+          zone: "Midfield",
+          player_id: "p-receiver",
+          secondary_player_id: "p-passer",
+        },
+      ];
+
+      const ballStep0 = calculateBallPosition({
+        zone: "Midfield",
+        possession: "Home",
+        events,
+        homePositions: home,
+        awayPositions: [],
+        step: 0,
+      });
+
+      const ballStep1 = calculateBallPosition({
+        zone: "Midfield",
+        possession: "Home",
+        events,
+        homePositions: home,
+        awayPositions: [],
+        step: 1,
+      });
+
+      expect(ballStep0.x).toBeCloseTo(45, 0);
+      expect(ballStep1.passTrajectory).toBeDefined();
+      if (ballStep1.passTrajectory) {
+        expect(ballStep1.passTrajectory.fromX).toBeCloseTo(45, 0);
+        expect(ballStep1.passTrajectory.toX).toBeCloseTo(65, 0);
+      }
+    });
+
+    it("returns shot trajectory towards target goal on shot event", () => {
+      const home: PlayerPitchPos[] = [
+        {
+          playerId: "p-striker",
+          name: "Striker",
+          number: 9,
+          position: "Forward",
+          isGoalkeeper: false,
+          side: "Home",
+          x: 80,
+          y: 50,
+        },
+      ];
+
+      const events: MatchEvent[] = [
+        {
+          minute: 30,
+          event_type: "ShotOnTarget",
+          side: "Home",
+          zone: "AwayBox",
+          player_id: "p-striker",
+          secondary_player_id: null,
+        },
+      ];
+
+      const ball = calculateBallPosition({
+        zone: "AwayBox",
+        possession: "Home",
+        events,
+        homePositions: home,
+        awayPositions: [],
+        step: 1,
+      });
+
+      expect(ball.isShot).toBe(true);
+      expect(ball.targetX).toBeGreaterThanOrEqual(97);
     });
   });
 });

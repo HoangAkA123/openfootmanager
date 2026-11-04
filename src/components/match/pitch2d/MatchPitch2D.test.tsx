@@ -53,6 +53,41 @@ describe("MatchPitch2D", () => {
     ];
 
     render(<MatchPitch2D snapshot={snapshot} latestEvents={goalEvents} />);
-    expect(screen.getByText(/GOAL!/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/GOAL!/i).length).toBeGreaterThan(0);
+  });
+
+  it("renders pass trajectory line and action badge when a pass occurs", () => {
+    const snapshot = makeSnapshot();
+    const passEvents = [
+      {
+        minute: 22,
+        event_type: "PassCompleted",
+        side: "Home" as const,
+        zone: "Midfield",
+        player_id: snapshot.home_team.players[1]?.id ?? "p2",
+        secondary_player_id: snapshot.home_team.players[0]?.id ?? "p1",
+      },
+    ];
+
+    const { container } = render(<MatchPitch2D snapshot={snapshot} latestEvents={passEvents} />);
+    expect(container.querySelector('[data-testid="ball-dot"]')).toBeInTheDocument();
+    expect(screen.getByText(/Pass/i)).toBeInTheDocument();
+  });
+
+  it("renders shot action badge during a shot event", () => {
+    const snapshot = makeSnapshot();
+    const shotEvents = [
+      {
+        minute: 60,
+        event_type: "ShotOnTarget",
+        side: "Home" as const,
+        zone: "AwayBox",
+        player_id: snapshot.home_team.players[0]?.id ?? "p1",
+        secondary_player_id: null,
+      },
+    ];
+
+    render(<MatchPitch2D snapshot={snapshot} latestEvents={shotEvents} />);
+    expect(screen.getByText(/Shot/i)).toBeInTheDocument();
   });
 });
